@@ -1,5 +1,6 @@
 # seekutil
 a function for simple access to SeekThermal by python
+
 it can get the following data:
 
 - image data
@@ -7,8 +8,7 @@ it can get the following data:
 - min temperature
 
 # support
-SeekThermal Compact XR
-(maybe Compact is ok)
+SeekThermal Compact XR (maybe Compact is ok)
 
 # require
 python2.7, numpy, pyusb, Pillow
