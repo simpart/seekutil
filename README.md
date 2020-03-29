@@ -31,6 +31,6 @@ please see also ./src/sample.py
 seek = SeekThermal()
 inf  = seek.getInfo()
 print(inf)
-inf.image.save('./thermo.bmp')
+inf['image'].save('./thermo.bmp')
 ```
 
