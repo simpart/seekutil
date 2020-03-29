@@ -1,5 +1,10 @@
 # seekutil
 a function for simple access to SeekThermal by python
+it can get the following data:
+
+- image data
+- max temperature
+- min temperature
 
 # support
 SeekThermal Compact XR
