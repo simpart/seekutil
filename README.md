@@ -7,6 +7,11 @@ it can get the following data:
 - max temperature
 - min temperature
 
+## sample image
+
+![sample](https://simpart.github.io/seekutil/sample.bmp)
+
+
 # support
 SeekThermal Compact XR (maybe Compact is ok)
 
