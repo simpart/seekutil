@@ -1,4 +1,4 @@
-
+import time
 import usb
 import sys
 import array
@@ -30,7 +30,11 @@ class SeekThermal:
         assert ep is not None
         
         self.__setup()
-
+    
+    def __del__(self):
+        for i in range(3):
+            self.__send(0x41, 0x3C, 0, 0, '\x00\x00')
+    
 
     def __send(self,bmRequestType, bRequest, wValue=0, wIndex=0, data_or_wLength=None, timeout=None):
         assert (self.__dev.ctrl_transfer(bmRequestType, bRequest, wValue, wIndex, data_or_wLength, timeout) == len(data_or_wLength))
@@ -73,6 +77,7 @@ class SeekThermal:
         self.__send(0x41, 0x3C, 0, 0, '\x01\x00')
         ret = self.__rcvmsg(0xC1, 0x3D, 0, 0, 2)
 
+
     def __getframe(self):
         while True:
             # Send read frame request
@@ -110,7 +115,7 @@ class SeekThermal:
         maxt = float(self.__calib.max_val - 5950) / 40  # C
         mint = float(self.__calib.min_val - 5950) / 40  # C
         
-        return { 'image': frm, 'temperature': { max: maxt, min: mint } }
+        return { 'image': frm, 'temperature': { 'max': maxt, 'min': mint } }
 
 
 class ThermalFrame:

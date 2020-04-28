@@ -6,9 +6,9 @@ if __name__ == "__main__":
     try:
         seek = SeekThermal()
         inf  = seek.getInfo()
-        print(inf)
-
-        inf['image'].save('./thermo.bmp')
+        #print(inf)
+#
+#        inf['image'].save('./thermo.bmp')
 
     except:
         import traceback

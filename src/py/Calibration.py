@@ -22,7 +22,7 @@ class Calibration:
     __pallete         = []
 
     def __init__(self):
-        with open('./pallete.csv') as f:
+        with open(os.path.dirname(os.path.abspath(__file__)) + '/pallete.csv') as f:
             reader = csv.reader(f)
             idx = 0
             for row in reader:
