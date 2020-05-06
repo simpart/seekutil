@@ -1,4 +1,4 @@
-#include "SeekUtil.h"
+#include "seekutil.h"
 #include <libgen.h>
 #include <iostream>
 #include <fstream>

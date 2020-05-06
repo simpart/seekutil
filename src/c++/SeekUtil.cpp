@@ -1,23 +1,31 @@
-#include "SeekUtil.h"
+#include "seekutil.h"
 #include <cstring>
 
 SeekUtil::SeekUtil () {
     try {
         device.open();
         init();
-//        
-//        for (int idx=0; idx < 100 ;idx++) {
-//            printf("getframe\n");
-//            getframe();
-//        }
     } catch (char const *err) {
+        printf("deinit\n");
+        std::vector<uint8_t> data = { 0x00, 0x00 };
+        device.send(CmdType::SET_OPERATION_MODE, data);
+        device.send(CmdType::SET_OPERATION_MODE, data);
+        device.send(CmdType::SET_OPERATION_MODE, data);
         device.close();
-        cout << "[error]" << err << ": " << __FILE__ << "->" << __LINE__ << endl;
-        throw;
+        device.open();
+        init();
     }
 }
 
 SeekUtil::~SeekUtil () {
+    try {
+        close();
+    } catch (char const *err) {
+        cout << "[error]" << err << ": " << __FILE__ << "->" << __LINE__ << endl;
+    }
+}
+
+void SeekUtil::close () {
     try {
         /* send reset */
         std::vector<uint8_t> data;
@@ -25,7 +33,7 @@ SeekUtil::~SeekUtil () {
         device.send(CmdType::SET_OPERATION_MODE, data);
         device.send(CmdType::SET_OPERATION_MODE, data);
         device.send(CmdType::SET_OPERATION_MODE, data);
-        
+
         device.close();
     } catch (char const *err) {
         cout << "[error]" << err << ": " << __FILE__ << "->" << __LINE__ << endl;
@@ -34,20 +42,13 @@ SeekUtil::~SeekUtil () {
 
 void SeekUtil::init () {
     try {
-        //printf("init device\n");
         std::vector<uint8_t> data;
         
         try {
             data = { 0x01 };
             device.send(CmdType::TARGET_PLATFORM, data);
         } catch (...) {
-            data = { 0x00, 0x00 };
-            device.send(CmdType::SET_OPERATION_MODE, data);
-            device.send(CmdType::SET_OPERATION_MODE, data);
-            device.send(CmdType::SET_OPERATION_MODE, data);
-            data = { 0x01 };
-            device.send(CmdType::TARGET_PLATFORM, data);
-            //printf("deinit\n");
+            throw "failed init";
         }
 
         data = { 0x00, 0x00 };
@@ -119,7 +120,7 @@ void SeekUtil::getinfo (SeekInfo_t *info) {
             //printf("frame id:%d\n", buffer[10]);
             isframe = carib.execute(buffer);
         }
-        
+        printf("\x1b[1A");
         memcpy(&(info->bmp[54]), carib.bmpdat, sizeof(carib.bmpdat));
         
         info->min_temp = (float) (carib.min_temp - 5950) / 40;

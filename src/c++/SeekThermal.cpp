@@ -1,4 +1,4 @@
-#include "SeekUtil.h"
+#include "seekutil.h"
 
 void SeekThermal::open (void) {
     try {
@@ -83,8 +83,6 @@ void SeekThermal::initconf () {
 
 void SeekThermal::close (void) {
     try {
-        printf("close device\n");
-        
         if (handle != NULL) {
             libusb_release_interface(handle, 0);  /* release claim */
             libusb_close(handle);                 /* revert open */
@@ -138,7 +136,7 @@ void SeekThermal::fetch (uint16_t* buffer, std::size_t size) {
         }
         
         /* correct endianness */
-        for (int i=0; i < size; i++) {
+        for (int i=0; i < (int) size; i++) {
             buffer[i] = le16toh(buffer[i]);
         }
     } catch (char const *err) {
@@ -159,7 +157,7 @@ void SeekThermal::transfer(uint8_t req_tp, uint8_t req, uint16_t value, uint16_t
         if (ret < 0) {
             throw libusb_error_name(ret);
         }
-        if (ret != data.size()) {
+        if (ret != (int) data.size()) {
             throw "mismatched transfer bytes";
         }
     } catch (char const *err) {

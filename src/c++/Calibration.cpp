@@ -1,5 +1,5 @@
 #include <fstream>
-#include "SeekUtil.h"
+#include "seekutil.h"
 #include <libgen.h>
 #include <vector>
 #include <string>

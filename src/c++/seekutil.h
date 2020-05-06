@@ -135,6 +135,7 @@ class SeekUtil {
         SeekUtil();
         ~SeekUtil();
         void getinfo (SeekInfo_t *);
+        void close (void);
 };
 
 #endif
