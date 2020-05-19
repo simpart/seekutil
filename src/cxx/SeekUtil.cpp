@@ -117,14 +117,13 @@ void SeekUtil::getinfo (SeekInfo_t *info) {
         while (!isframe) {
             device.send(CmdType::START_GET_IMAGE_TRANSFER, data);
             device.fetch(buffer, RAW_FRAME_SIZE);
-            //printf("frame id:%d\n", buffer[10]);
             isframe = carib.execute(buffer);
         }
         printf("\x1b[1A");
-        memcpy(&(info->bmp[54]), carib.bmpdat, sizeof(carib.bmpdat));
+        memcpy(&(info->image[54]), carib.bmpdat, sizeof(carib.bmpdat));
         
-        info->min_temp = (float) (carib.min_temp - 5950) / 40;
-        info->max_temp = (float) (carib.max_temp - 5950) / 40;
+        info->temperature.min = (float) (carib.min_temp - 5950) / 40;
+        info->temperature.max = (float) (carib.max_temp - 5950) / 40;
         
     } catch (char const *err) {
         cout << "[error]" << err << ": " << __FILE__ << " -> " << __LINE__ << endl;

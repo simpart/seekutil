@@ -1,0 +1,54 @@
+#include "seekutil.h"
+#include <libgen.h>  // for dirname
+#include <iostream>
+#include <signal.h>
+#include <fstream>
+
+using namespace std;
+
+int seek_loop = true;
+
+void sigevt (int signo) {
+    try {
+        seek_loop = false;
+    } catch (char const* err) {
+        cout << "[error]" << err << ": " << __FILE__ << " -> " << __LINE__ << endl;
+        throw;
+    }
+}
+
+int main (int argc, char *argv[]) {
+    try {
+        SeekUtil seek;
+        SeekInfo info;  // do not init
+        ofstream fout;
+        char thm_path[128] = { 0 };
+
+        if (signal(SIGINT, sigevt) == SIG_ERR) {
+            throw "SIGINT error";
+        }
+
+        /* open output file */
+        snprintf(&thm_path[0], sizeof(thm_path), "%s/thermo.bmp", dirname(argv[0]));
+        fout.open(thm_path, ios::out|ios::binary|ios::trunc);
+        if (!fout) {
+            throw "could not open bitmap file";
+        }
+
+        while (seek_loop) {
+            /* get thermo info */
+            seek.getinfo(&info);
+
+            /* display temperature */
+            printf("max:%f, min:%f\n", info.temperature.max, info.temperature.min);
+
+            /* write image file */
+            fout.write((char *) info.image, sizeof(info.image));
+        }
+
+        fout.close();
+
+    } catch (char const* err) {
+         cout << "[error]" << err << ": " << __FILE__ << "->" << __LINE__ << endl;
+    }
+}

@@ -26,8 +26,13 @@ using namespace std;
 #define RAW_FRAME_HEIGHT 156
 #define RAW_FRAME_SIZE   RAW_FRAME_WIDTH * RAW_FRAME_HEIGHT
 
+typedef struct temp {
+    float  min;
+    float  max;
+} temp_t;
+
 typedef struct SeekInfo {
-    unsigned char bmp[97398] = {
+    unsigned char image[97398] = {
         66, 77, 118, 124,  1,   0, 0, 0,   0,  0,
         54,  0,   0,   0, 40,   0, 0, 0, 208,  0,
         0,   0, 156,   0,  0,   0, 1, 0,  24,  0,
@@ -35,8 +40,7 @@ typedef struct SeekInfo {
         0,   0, 195,  14,  0,   0, 0, 0,   0,  0,
         0,   0,   0,   0
     };
-    float  min_temp;
-    float  max_temp;
+    temp_t temperature;
 } SeekInfo_t;
 
 struct CmdType {
